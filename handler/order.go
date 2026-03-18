@@ -6,7 +6,7 @@ import (
 
 	"github.com/gin-gonic/gin"
 
-	"github.com/mamh1019/go-boilerplate/order"
+	"github.com/mamh1019/lambda-go-server-boilerplate/order"
 )
 
 type OrderHandler struct {

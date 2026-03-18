@@ -7,8 +7,8 @@ import (
 
 	"github.com/gin-gonic/gin"
 
-	appkafka "github.com/mamh1019/go-boilerplate/kafka"
-	"github.com/mamh1019/go-boilerplate/user"
+	appkafka "github.com/mamh1019/lambda-go-server-boilerplate/kafka"
+	"github.com/mamh1019/lambda-go-server-boilerplate/user"
 )
 
 type UserHandler struct {

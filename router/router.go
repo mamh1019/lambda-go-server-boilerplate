@@ -7,16 +7,23 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/redis/go-redis/v9"
 
-	"github.com/mamh1019/go-boilerplate/db"
-	"github.com/mamh1019/go-boilerplate/handler"
-	"github.com/mamh1019/go-boilerplate/kafka"
-	"github.com/mamh1019/go-boilerplate/order"
-	"github.com/mamh1019/go-boilerplate/user"
+	"github.com/mamh1019/lambda-go-server-boilerplate/db"
+	"github.com/mamh1019/lambda-go-server-boilerplate/handler"
+	"github.com/mamh1019/lambda-go-server-boilerplate/kafka"
+	"github.com/mamh1019/lambda-go-server-boilerplate/order"
+	"github.com/mamh1019/lambda-go-server-boilerplate/user"
 )
 
 // SetupRouter는 모든 라우팅을 설정하고 gin.Engine 을 반환합니다.
 func SetupRouter() *gin.Engine {
-	r := gin.Default()
+	mode := os.Getenv("GIN_MODE")
+	if mode == "" {
+		mode = gin.ReleaseMode
+	}
+	gin.SetMode(mode)
+
+	r := gin.New()
+	r.Use(gin.Logger(), gin.Recovery())
 
 	// DB 초기화
 	d, err := db.NewDB()
