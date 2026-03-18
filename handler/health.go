@@ -12,4 +12,3 @@ func Health(c *gin.Context) {
 		"status": "ok",
 	})
 }
-

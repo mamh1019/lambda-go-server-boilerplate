@@ -22,4 +22,3 @@ deploy-aws: deploy
 .PHONY: clean
 clean:
 	rm -rf $(BUILD_DIR)
-
