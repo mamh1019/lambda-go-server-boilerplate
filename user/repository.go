@@ -52,7 +52,6 @@ func (r *Repository) List(ctx context.Context) ([]User, error) {
 func (r *Repository) Get(ctx context.Context, id int) (*User, error) {
 	cacheKey := fmt.Sprintf("user:%d", id)
 
-	// 1) 캐시 조회
 	if r.rdb != nil {
 		if b, err := r.rdb.Get(ctx, cacheKey).Bytes(); err == nil {
 			var u User
@@ -62,7 +61,6 @@ func (r *Repository) Get(ctx context.Context, id int) (*User, error) {
 		}
 	}
 
-	// 2) DB 조회
 	var u User
 	err := r.db.QueryRowContext(ctx, `
 		SELECT user_id, user_name, coin, jewel, created
@@ -76,7 +74,6 @@ func (r *Repository) Get(ctx context.Context, id int) (*User, error) {
 		return nil, err
 	}
 
-	// 3) 캐시에 저장 (TTL 60초 예시)
 	if r.rdb != nil {
 		if b, err := json.Marshal(&u); err == nil {
 			_ = r.rdb.Set(ctx, cacheKey, b, time.Minute).Err()

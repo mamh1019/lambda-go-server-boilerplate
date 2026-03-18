@@ -14,7 +14,6 @@ import (
 	"github.com/mamh1019/lambda-go-server-boilerplate/user"
 )
 
-// SetupRouter는 모든 라우팅을 설정하고 gin.Engine 을 반환합니다.
 func SetupRouter() *gin.Engine {
 	mode := os.Getenv("GIN_MODE")
 	if mode == "" {
@@ -24,14 +23,11 @@ func SetupRouter() *gin.Engine {
 
 	r := gin.New()
 	r.Use(gin.Logger(), gin.Recovery())
-
-	// DB 초기화
 	d, err := db.NewDB()
 	if err != nil {
 		log.Fatalf("db connection error: %v", err)
 	}
 
-	// Redis 초기화 (없으면 nil 로 두고, 캐시는 비활성화)
 	redisAddr := os.Getenv("REDIS_ADDR")
 	if redisAddr == "" {
 		redisAddr = "localhost:6379"
@@ -41,27 +37,22 @@ func SetupRouter() *gin.Engine {
 		Addr: redisAddr,
 	})
 
-	// Kafka 프로듀서 초기화
 	kafkaProducer := kafka.NewProducer()
 
-	// 리포지토리 & 핸들러
 	userRepo := user.NewRepository(d, rdb)
 	userHandler := handler.NewUserHandler(userRepo, kafkaProducer)
 
 	orderRepo := order.NewRepository(d)
 	orderHandler := handler.NewOrderHandler(orderRepo)
 
-	// 헬스체크
 	r.GET("/health", handler.Health)
 
-	// 사용자 CRUD
 	r.GET("/users", userHandler.List)
 	r.GET("/users/:id", userHandler.Get)
 	r.POST("/users", userHandler.Create)
 	r.PUT("/users/:id", userHandler.Update)
 	r.DELETE("/users/:id", userHandler.Delete)
 
-	// 주문 CRUD
 	r.GET("/orders", orderHandler.List)
 	r.GET("/orders/:id", orderHandler.Get)
 	r.POST("/orders", orderHandler.Create)

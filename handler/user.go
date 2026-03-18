@@ -23,7 +23,6 @@ func NewUserHandler(repo *user.Repository, producer *appkafka.Producer) *UserHan
 	}
 }
 
-// List는 GET /users 전체 목록 조회
 func (h *UserHandler) List(c *gin.Context) {
 	users, err := h.repo.List(c.Request.Context())
 	if err != nil {
@@ -33,7 +32,6 @@ func (h *UserHandler) List(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"data": users})
 }
 
-// Get는 GET /users/:id 단건 조회
 func (h *UserHandler) Get(c *gin.Context) {
 	id, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
@@ -59,7 +57,6 @@ type createUserRequest struct {
 	Jewel    int `json:"jewel"`
 }
 
-// Create는 POST /users 생성
 func (h *UserHandler) Create(c *gin.Context) {
 	var req createUserRequest
 	if err := c.ShouldBindJSON(&req); err != nil {
@@ -86,7 +83,6 @@ type updateUserRequest struct {
 	Jewel    int `json:"jewel"`
 }
 
-// Update는 PUT /users/:id 수정
 func (h *UserHandler) Update(c *gin.Context) {
 	id, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
@@ -107,7 +103,6 @@ func (h *UserHandler) Update(c *gin.Context) {
 	c.Status(http.StatusNoContent)
 }
 
-// Delete는 DELETE /users/:id 삭제
 func (h *UserHandler) Delete(c *gin.Context) {
 	id, err := strconv.Atoi(c.Param("id"))
 	if err != nil {

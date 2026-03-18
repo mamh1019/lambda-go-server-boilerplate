@@ -8,12 +8,6 @@ import (
 	_ "github.com/go-sql-driver/mysql"
 )
 
-// NewDB는 환경변수 기반으로 MySQL 커넥션을 생성합니다.
-// 필요한 환경변수:
-//   - DB_HOST
-//   - DB_USER
-//   - DB_PASS
-//   - DB_NAME
 func NewDB() (*sql.DB, error) {
 	host := os.Getenv("DB_HOST")
 	user := os.Getenv("DB_USER")
